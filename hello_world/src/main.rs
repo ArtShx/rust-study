@@ -9,12 +9,13 @@ fn main() {
     // Sorting vector
     let mut numbers: Vec<u8> = gen_numbers(10);
     println!("Unsorted: {:?}", numbers);
-    let sorted = bubble_sort(&mut numbers);
-    println!("Sorted: {:?}", sorted);
+    bubble_sort(&mut numbers);
+    println!("Sorted: {:?}", numbers);
 
     // Closures
     let incr = |i: i32| -> i32 { i + 1 };
-    println!("{}, {}", incr(3), incr(-40));
+    assert_eq!(incr(3), 4);
+    assert_eq!(incr(-40), -39);
 
     let do_things = || -> () {
         // Do a lot of things
@@ -63,7 +64,7 @@ fn gen_numbers(n: u8) -> Vec<u8> {
     vec
 }
 
-fn bubble_sort(numbers: &mut Vec<u8>) -> &mut Vec<u8> {
+fn bubble_sort(numbers: &mut Vec<u8>) -> () {
     for _ in 1..numbers.len() {
         for i in 0..numbers.len()-1 {
             if numbers[i] > numbers[i+1] {
@@ -73,5 +74,4 @@ fn bubble_sort(numbers: &mut Vec<u8>) -> &mut Vec<u8> {
             }
         }
     }
-    numbers
 }
