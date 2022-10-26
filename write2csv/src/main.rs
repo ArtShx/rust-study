@@ -10,6 +10,17 @@ struct Record {
     country: String
 }
 
+#[derive(Debug)]
+struct Config {
+    filepath: String
+}
+
+impl Config {
+    fn new(args: &[String]) -> Config {
+        let filepath = args[1].clone();
+        Config { filepath }
+    }
+}
 
 fn read_file(file: &str) -> Result<Vec<Record>, Box<dyn Error>> {
     let mut records: Vec<Record> = Vec::new();
@@ -40,22 +51,27 @@ fn get_filepath() -> Option<String> {
     None
 }
 
+fn load_config() -> Config {
+    let file = get_filepath();
+    match file {
+        Some(x) => Config { filepath: x },
+        None => Config { filepath: String::from("cities.csv") }
+    }
+}
+
 fn main() {
 
-    let file_path: String = match get_filepath() {
-        Some(x) => { x },
-        None => { String::from("cities.csv") }
-    };
+    let config: Config = load_config();
 
-    println!("{file_path}");
+    println!("{}", config.filepath);
     
-    let records: Result<Vec<Record>, Box<dyn Error>> = read_file(&file_path[..]);
+    let records: Result<Vec<Record>, Box<dyn Error>> = read_file(&config.filepath[..]);
     if records.is_ok() {
         for rec in records.unwrap() {
             println!("city/population/country: {}/{}/{}", rec.city, rec.population, rec.country);
         }
     } else {
-        println!("Failed to read file: {}; {:?}", file_path, records);
+        println!("Failed to read file: {}; {:?}", config.filepath, records);
         match records {
             Err(err) => {
                 println!("Err {:?}", err);
