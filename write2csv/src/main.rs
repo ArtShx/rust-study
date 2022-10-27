@@ -59,16 +59,32 @@ fn load_config() -> Config {
     }
 }
 
+fn write_output(out: &str, records: &Vec<Record>) -> Result<(), Box<dyn Error>> {
+    // Outputs something into another csv
+    let mut writer = csv::Writer::from_path("out.csv")?;
+    writer.write_record(&["City", "Population", "Country"])?;
+    for record in records {
+        writer.write_record(&[record.city.clone(), record.population.to_string(), record.country.clone()])?;
+    }
+    writer.flush()?;
+    Ok(())
+}
+
 fn main() {
 
     let config: Config = load_config();
 
     println!("{}", config.filepath);
     
+    let mut total_population : u32 = 0;
     let records: Result<Vec<Record>, Box<dyn Error>> = read_file(&config.filepath[..]);
+    let mut reversed_records: Vec<Record> = Vec::new();
+
     if records.is_ok() {
         for rec in records.unwrap() {
             println!("city/population/country: {}/{}/{}", rec.city, rec.population, rec.country);
+            total_population += rec.population;
+            reversed_records.insert(0, rec);
         }
     } else {
         println!("Failed to read file: {}; {:?}", config.filepath, records);
@@ -81,4 +97,8 @@ fn main() {
             }
         }
     }
+
+    println!("Total population: {total_population}.");
+    write_output("out.csv", &reversed_records);
+    
 }
