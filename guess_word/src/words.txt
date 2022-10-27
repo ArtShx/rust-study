@@ -1,0 +1,12 @@
+banana
+apple
+garbage
+pizza
+fighter
+police
+cellphone
+mouse
+ball
+ring
+legend
+ear
