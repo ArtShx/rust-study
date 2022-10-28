@@ -1,9 +1,9 @@
 use std::error::Error;
 use std::env;
-
+use std::collections::HashMap;
 use serde::Deserialize;
 
-#[derive(Deserialize, Debug)]
+#[derive(Deserialize, Debug, Clone)]
 struct Record {
     city: String,
     population: u32,
@@ -79,12 +79,23 @@ fn main() {
     let mut total_population : u32 = 0;
     let records: Result<Vec<Record>, Box<dyn Error>> = read_file(&config.filepath[..]);
     let mut reversed_records: Vec<Record> = Vec::new();
+    let mut hmap: HashMap<char, Vec<u32>> = HashMap::new();
 
     if records.is_ok() {
         for rec in records.unwrap() {
             println!("city/population/country: {}/{}/{}", rec.city, rec.population, rec.country);
             total_population += rec.population;
-            reversed_records.insert(0, rec);
+            reversed_records.insert(0, rec.clone());
+
+            let key = rec.city.clone().chars().next().unwrap();
+            if !hmap.contains_key(&key) {
+                let mut v: Vec<u32> = Vec::new();
+                v.push(rec.population);
+                hmap.insert(key, v);
+            } 
+            else {
+                // hmap[&key].push(1);  # TODO: not working
+            }
         }
     } else {
         println!("Failed to read file: {}; {:?}", config.filepath, records);
@@ -99,6 +110,7 @@ fn main() {
     }
 
     println!("Total population: {total_population}.");
+    println!("{:?}", hmap);
     write_output("out.csv", &reversed_records);
     
 }
