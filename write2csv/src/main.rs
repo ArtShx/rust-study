@@ -87,14 +87,14 @@ fn main() {
             total_population += rec.population;
             reversed_records.insert(0, rec.clone());
 
+            // Key is the 1st letter of the city
             let key = rec.city.clone().chars().next().unwrap();
             if !hmap.contains_key(&key) {
-                let mut v: Vec<u32> = Vec::new();
-                v.push(rec.population);
-                hmap.insert(key, v);
+                hmap.insert(key, (&[rec.population]).to_vec());
             } 
             else {
-                // hmap[&key].push(1);  # TODO: not working
+                // Get mutable value and process with it
+                hmap.get_mut(&key).unwrap().push(1);
             }
         }
     } else {
