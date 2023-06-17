@@ -8,3 +8,10 @@ edition = "2021"
 [dependencies]
 gst = { package = "gstreamer", git = "https://gitlab.freedesktop.org/gstreamer/gstreamer-rs", features = ["v1_18"] }
 gst-base = { package = "gstreamer-base", git = "https://gitlab.freedesktop.org/gstreamer/gstreamer-rs", features = ["v1_18"] }
+anyhow = "1"
+# clap = { version = "3", features = ["derive"] }
+# tracing = { version = "0.1", features = ["log"] }
+# tracing-subscriber = { version = "0.3", features = ["registry", "env-filter"] }
+# tracing-log = "0.1"
+# thiserror = "1"
+# regex = "1"

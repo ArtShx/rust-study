@@ -1,0 +1,4 @@
+
+# Pipeline for tests
+gst-launch-1.0  videotestsrc ! video/x-raw, width=320, height=240 ! \
+  videoscale ! videoconvert ! ximagesink

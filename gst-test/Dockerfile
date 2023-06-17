@@ -1,7 +1,7 @@
 FROM rust:1.63
 
-RUN apt update
-RUN apt-get install -y \
+RUN apt update && \
+    apt-get install -y \
     libgstreamer1.0-dev \
     libgstreamer-plugins-base1.0-dev \
     libgstreamer-plugins-bad1.0-dev \
