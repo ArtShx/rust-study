@@ -88,7 +88,7 @@ impl App {
 fn main() -> Result<(), Error>{
     println!("Hello, world!");
     gst::init()?;
-    let app = App::new().unwrap();
+    let app = App::new()?;
     app.run()?;
     Ok(())
 }
