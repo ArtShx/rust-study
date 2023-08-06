@@ -1,3 +1,9 @@
+/*
+* Creates a simples pipeline
+gst-launch-1.0 videotestsrc ! videoscale ! videoconvert ! ximagesink
+*/
+#![allow(dead_code)]
+
 use anyhow::{anyhow, Context, Error};
 use gst::prelude::*;
 use std::sync::{Arc, Mutex};
@@ -12,12 +18,12 @@ struct State {
     pipeline: gst::Pipeline,
 }
 
-struct App {
+pub struct App {
     state: Arc<Mutex<State>>
 }
 
 impl App {
-    fn new() -> Result<Self, Error> {
+    pub fn new() -> Result<Self, Error> {
         Ok(Self {
             state: Arc::new(Mutex::new(State { 
                 pipeline: gst::Pipeline::new(None), 
@@ -25,7 +31,7 @@ impl App {
         })
     }
 
-    fn run(&self) -> Result<(), Error> {
+    pub fn run(&self) -> Result<(), Error> {
         let pipeline = {
             let state = self.state.lock().unwrap();
             state.pipeline.clone()
@@ -85,15 +91,10 @@ impl App {
     }
 }
 
-// mod helloworld;
-mod simple;
-
 fn main() -> Result<(), Error>{
     println!("Hello, world!");
     gst::init()?;
-    // let app = helloworld::App::new()?;
-    // let app = App::new()?;
-    // app.run()?;
-    simple::run()?;
+    let app = App::new()?;
+    app.run()?;
     Ok(())
 }
