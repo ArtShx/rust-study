@@ -1,10 +1,12 @@
 use anyhow::{anyhow, Context, Error};
 use gst::prelude::*;
 use std::sync::{Arc, Mutex};
+use tracing::info;
+use tracing_subscriber::prelude::*;
 
 // Simple wrapper around gst_element_factory_make with a more useful error message
 pub fn make_element(element: &str, name: Option<&str>) -> Result<gst::Element, Error> {
-    gst::ElementFactory::make_with_name(element, name)
+use crate::common::make_element;
         .with_context(|| format!("Failed to make element {}", element))
 }
 
@@ -85,15 +87,38 @@ impl App {
     }
 }
 
-// mod helloworld;
-mod simple;
+fn initialize_logging(envvar_name: &str) -> Result<(), Error> {
+    tracing_log::LogTracer::init()?;
+    let env_filter = tracing_subscriber::EnvFilter::try_from_env(envvar_name)
+        .unwrap_or_else(|_| tracing_subscriber::EnvFilter::new("info"));
+    let fmt_layer = tracing_subscriber::fmt::layer()
+        .with_thread_ids(true)
+        .with_target(true)
+        .with_span_events(
+            tracing_subscriber::fmt::format::FmtSpan::NEW
+                | tracing_subscriber::fmt::format::FmtSpan::CLOSE,
+        );
+    let subscriber = tracing_subscriber::Registry::default()
+        .with(env_filter)
+        .with(fmt_layer);
+    tracing::subscriber::set_global_default(subscriber)?;
 
-fn main() -> Result<(), Error>{
-    println!("Hello, world!");
+    Ok(())
+}
+
+// mod helloworld;
+mod common;
+mod simple;
+mod dynamic_pipe;
+
+fn main() -> Result<(), Error> {
+    initialize_logging("GST_STUDY");
+    // common::my_func();
     gst::init()?;
     // let app = helloworld::App::new()?;
     // let app = App::new()?;
     // app.run()?;
-    simple::run()?;
+    dynamic_pipe::run()?;
+
     Ok(())
 }

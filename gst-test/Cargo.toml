@@ -6,8 +6,14 @@ edition = "2021"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-gst = { package = "gstreamer", git = "https://gitlab.freedesktop.org/gstreamer/gstreamer-rs", features = ["v1_18"] }
-gst-base = { package = "gstreamer-base", git = "https://gitlab.freedesktop.org/gstreamer/gstreamer-rs", features = ["v1_18"] }
+# gst = { package = "gstreamer", git = "https://gitlab.freedesktop.org/gstreamer/gstreamer-rs", features = ["v1_18"] }
+# gst-base = { package = "gstreamer-base", git = "https://gitlab.freedesktop.org/gstreamer/gstreamer-rs", features = ["v1_18"] }
+# gstreamer-editing-services = { package = "gstreamer-editing-services", git = "https://gitlab.freedesktop.org/gstreamer/gstreamer-rs", features = ["v1_18"] }
+
+gst = { package = "gstreamer", path = "/home/arthur/workspace/projects/gst/gstreamer-rs/gstreamer/", features = ["v1_18"] }
+gst-base = { package = "gstreamer-base", path = "/home/arthur/workspace/projects/gst/gstreamer-rs/gstreamer-base/", features = ["v1_18"] }
+# gstreamer-editing-services = { package = "gstreamer-editing-services", path = "/home/arthur/workspace/projects/gst/gstreamer-rs/gstreamer-editing-services/", features = ["v1_18"] }
+
 anyhow = "1"
 glib = { git = "https://github.com/gtk-rs/gtk-rs-core.git", package = "glib" }
 # clap = { version = "3", features = ["derive"] }
